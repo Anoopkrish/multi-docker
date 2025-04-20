@@ -9,7 +9,16 @@ script:
   - docker run -e CI=true AnapiDappa/reacttest npm run test
 
 after_success:
-  - docker build -t AnapiDappa/multi-react ./client .
+  - docker build -t AnapiDappa/multi-client ./client .
   - docker build -t AnapiDappa/multi-nginx ./nginx .
   - docker build -t AnapiDappa/multi-server ./server .
-  - docker build -t AnapiDappa/multi-worker ./worker .  
+  - docker build -t AnapiDappa/multi-worker ./worker . 
+  # Log in to docker CLI 
+  -echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # take these images and push them to docker hub
+  docker push AnapiDappa/multi-client
+  docker push AnapiDappa/multi-nginx
+  docker push AnapiDappa/multi-server
+  docker push AnapiDappa/multi-worker
+
+  
