@@ -16,9 +16,19 @@ after_success:
   # Log in to docker CLI 
   -echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # take these images and push them to docker hub
-  docker push AnapiDappa/multi-client
-  docker push AnapiDappa/multi-nginx
-  docker push AnapiDappa/multi-server
-  docker push AnapiDappa/multi-worker
+  - docker push AnapiDappa/multi-client
+  - docker push AnapiDappa/multi-nginx
+  - docker push AnapiDappa/multi-server
+  - docker push AnapiDappa/multi-worker
 
-  
+deploy:
+  elasticbeanstalk: elasticbeanstalk
+  region: eu-north-1
+  app: multi-docker
+  env: Multi-docker-env
+  bucket_name: elasticbeanstalk-eu-north-1-891377167372
+  bucket_path: docker-multi
+  on:
+     branch: main
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
